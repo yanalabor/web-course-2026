@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Резюме</title>
+    <link rel="stylesheet" href="laba1.css">
+</head>
+
+<body>
+    <header>
+        <h1>Шерлок Холмс</h1>
+        <p>Частный сыщик</p>
+        <p>Агрессивен, вспыльчив, жесток</p>
+    </header>
+
+    <nav>
+        <a href="#about">О себе</a>
+        <a href="#education">Образование</a>
+        <a href="#skills">Навыки</a>
+        <a href="#contacts">Контакты</a>
+    </nav>
+
+    <main>
+
+        <img src="foto.jpeg" alt="Мое фото">
+
+        <section id="about">
+            <h2>О себе</h2>
+            <p>
+                Я зачастую веду себя как ребёнок.
+                С вредным, нетерпеливым характером, искренне впадающий в тоску и хандру, если в моей жизни отсутствует
+                дело, которое способно меня увлечь.
+                В общении отличаюсь абсолютной прямотой и категоричностью, обескураживая тем, насколько не забочусь о
+                правилах хорошего тона или подборе слов.
+            </p>
+        </section>
+
+        <section id="education">
+            <h2>Образование</h2>
+            <ul>
+                <li>Где-то в Англии</li>
+                <li>Обучаюсь в течение всей жизни</li>
+            </ul>
+        </section>
+
+        <section id="skills">
+            <h2>Навыки</h2>
+            <div class="skills-list">
+                <span class="skill">Наблюдательность</span>
+                <span class="skill">Дедукция и логика</span>
+                <span class="skill">Чертоги разума</span>
+                <span class="skill">Физическая подготовка</span>
+                <span class="skill">Прикладные таланты</span>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="contacts">
+        <h2>Контакты</h2>
+        <p>
+            <a href="mailto:sherlock@example.com">Написать на почту</a>
+        </p>
+        <p>
+            <a href="https://yandex.by/maps/-/CTdOYKKH" target="_blank">Мой дом</a>
+        </p>
+        <p>
+            <a href="tel:+447730038506">Номер телефона</a>
+        </p>
+    </footer>
+
+</body>
+
+</html>
