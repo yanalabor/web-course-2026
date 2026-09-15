@@ -18,7 +18,6 @@ h3 {
     color: #1a2f4b;
 }
 
-/* ===== Кнопки ===== */
 .btn {
     display: inline-block;
     padding: 12px 24px;
@@ -53,7 +52,6 @@ h3 {
     color: white;
 }
 
-/* ===== Header (Flexbox) ===== */
 .site-header {
     display: flex;
     flex-direction: row;
@@ -84,7 +82,6 @@ h3 {
     color: #4a90d9;
 }
 
-/* Гамбургер — виден на мобильном */
 .burger {
     display: flex;
     flex-direction: column;
@@ -105,7 +102,7 @@ h3 {
     border-radius: 2px;
 }
 
-/* ===== Hero ===== */
+
 .hero {
     display: flex;
     flex-direction: column;
@@ -125,7 +122,6 @@ h3 {
     color: #4a6a8a;
 }
 
-/* ===== УТП ===== */
 .usp {
     text-align: center;
     padding: 20px;
@@ -134,7 +130,6 @@ h3 {
     font-weight: bold;
 }
 
-/* ===== Услуги — Grid ===== */
 .services {
     padding: 50px 20px;
     text-align: center;
@@ -182,7 +177,6 @@ h3 {
     font-size: 1.2em;
 }
 
-/* ===== Преимущества — Grid ===== */
 .benefits {
     padding: 50px 20px;
     text-align: center;
@@ -230,7 +224,6 @@ h3 {
     font-weight: bold;
 }
 
-/* ===== FAQ ===== */
 .faq {
     padding: 50px 20px;
     background-color: #f0f8ff;
@@ -244,7 +237,6 @@ h3 {
     margin-bottom: 6px;
 }
 
-/* ===== Форма (Flexbox) ===== */
 .contact-form {
     padding: 50px 20px;
     text-align: center;
@@ -291,7 +283,6 @@ h3 {
     border-color: #4a90d9;
 }
 
-/* ===== Контакты (footer) ===== */
 #contacts {
     display: flex;
     flex-direction: column;
@@ -322,11 +313,6 @@ h3 {
     background-color: #4a90d9;
 }
 
-/* ===================================== */
-/* MOBILE FIRST: медиазапросы для планшета и десктопа */
-/* ===================================== */
-
-/* Планшет: от 768px */
 @media (min-width: 768px) {
     .main-nav {
         display: flex;
@@ -347,7 +333,6 @@ h3 {
     }
 }
 
-/* ===== Фото-заглушки (плейсхолдеры) ===== */
 .photo-frame {
     display: flex;
     align-items: center;
@@ -376,7 +361,6 @@ h3 {
     border-radius: 50%;
 }
 
-/* ===== Выпадающий список "выбрать будильника" ===== */
 .alarm-select {
     width: 100%;
     padding: 12px;
