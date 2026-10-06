@@ -1,0 +1,43 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 150px 150px;
+    grid-template-rows: 150px 150px;
+    gap: 10px;
+    width: 310px;
+    margin: 20px auto;
+}
+
+.pad {
+    border-radius: 10px;
+    cursor: pointer;
+    opacity: 0.85;
+    transition: opacity 0.1s, transform 0.1s, box-shadow 0.1s;
+}
+
+.pad.active {
+    opacity: 1;
+    transform: scale(1.03);
+    box-shadow: 0 0 25px 5px rgba(255, 255, 255, 0.7);
+}
+
+#pad0 {
+    background-color: #ff1f1f;
+}
+
+#pad1 {
+    background-color: #1f6bff;
+}
+
+#pad2 {
+    background-color: #1fd94f;
+}
+
+#pad3 {
+    background-color: #ffd400;
+}
