@@ -1,98 +1,136 @@
-var pads = [
-    document.getElementById("pad0"),
-    document.getElementById("pad1"),
-    document.getElementById("pad2"),
-    document.getElementById("pad3")
-];
+(function () {
+    "use strict";
 
-var startBtn = document.getElementById("startBtn");
-var levelText = document.getElementById("levelText");
-var messageDiv = document.getElementById("message");
+    const state = {
+        sequence: [],
+        playerStep: 0,
+        level: 0,
+        isShowingSequence: false,
 
-var sequence = [];
-var playerStep = 0;
-var level = 0;
-var isShowingSequence = false;
+        reset() {
+            this.sequence = [];
+            this.level = 0;
+            this.playerStep = 0;
+            this.isShowingSequence = false;
+        },
 
-function addRandomStep() {
-    var randomIndex = Math.floor(Math.random() * 4);
-    sequence.push(randomIndex);
-}
+        incrementLevel() {
+            this.level++;
+            this.playerStep = 0;
+        },
 
-function lightPad(index) {
-    pads[index].classList.add("active");
-    setTimeout(function () {
-        pads[index].classList.remove("active");
-    }, 400);
-}
+        addRandomStep() {
+            const randomIndex = Math.floor(Math.random() * 4);
+            this.sequence.push(randomIndex);
+        }
+    };
 
-function showSequence() {
-    isShowingSequence = true;
-    playerStep = 0;
-    messageDiv.textContent = "";
+    const ui = {
+        pads: [
+            document.getElementById("pad0"),
+            document.getElementById("pad1"),
+            document.getElementById("pad2"),
+            document.getElementById("pad3")
+        ],
+        startBtn: document.getElementById("startBtn"),
+        levelText: document.getElementById("levelText"),
+        messageDiv: document.getElementById("message"),
 
-    var i = 0;
+        updateLevel(level) {
+            this.levelText.textContent = `Уровень: ${level}`;
+        },
 
-    function showNextStep() {
-        if (i < sequence.length) {
-            lightPad(sequence[i]);
-            i = i + 1;
+        clearMessage() {
+            this.messageDiv.textContent = "";
+        },
+
+        showGameOver(level) {
+            this.messageDiv.textContent = `Вы дошли до уровня ${level}`;
+            this.startBtn.disabled = false;
+        },
+
+        setStartButtonDisabled(disabled) {
+            this.startBtn.disabled = disabled;
+        },
+
+        lightPad(index) {
+            const pad = this.pads[index];
+            if (!pad) return;
+            
+            pad.classList.add("active");
+            setTimeout(() => {
+                pad.classList.remove("active");
+            }, 400);
+        }
+    };
+
+    const controller = {
+        startGame() {
+            ui.setStartButtonDisabled(true);
+            state.reset();
+            ui.clearMessage();
+            this.nextRound();
+        },
+
+        nextRound() {
+            state.incrementLevel();
+            ui.updateLevel(state.level);
+            state.addRandomStep();
+            this.showSequence();
+        },
+
+        showSequence() {
+            state.isShowingSequence = true;
+            ui.clearMessage();
+
+            let i = 0;
+            const showNextStep = () => {
+                if (i < state.sequence.length) {
+                    ui.lightPad(state.sequence[i]);
+                    i++;
+                    setTimeout(showNextStep, 700);
+                } else {
+                    state.isShowingSequence = false;
+                }
+            };
+
             setTimeout(showNextStep, 700);
-        } else {
-            isShowingSequence = false;
+        },
+
+        handlePadClick(index) {
+            if (state.isShowingSequence) return;
+
+            ui.lightPad(index);
+
+            if (index === state.sequence[state.playerStep]) {
+                state.playerStep++;
+
+                if (state.playerStep === state.sequence.length) {
+                    setTimeout(() => this.nextRound(), 700);
+                }
+            } else {
+                this.endGame();
+            }
+        },
+
+        endGame() {
+            state.isShowingSequence = false;
+            ui.showGameOver(state.level);
+        },
+
+        init() {
+            // Вешаем обработчики событий
+            ui.pads.forEach((pad) => {
+                pad.addEventListener("click", () => {
+                    const index = Number(pad.dataset.index);
+                    this.handlePadClick(index);
+                });
+            });
+
+            ui.startBtn.addEventListener("click", () => {
+                this.startGame();
+            });
         }
-    }
-
-    setTimeout(showNextStep, 700);
-}
-
-function startGame() {
-    sequence = [];
-    level = 0;
-    levelText.textContent = "Уровень: " + level;
-    messageDiv.textContent = "";
-    nextRound();
-}
-
-function nextRound() {
-    level = level + 1;
-    levelText.textContent = "Уровень: " + level;
-    addRandomStep();
-    showSequence();
-}
-
-function endGame() {
-    messageDiv.textContent = "Вы дошли до уровня " + level;
-    startBtn.disabled = false;
-    isShowingSequence = false;
-}
-
-function handlePadClick(index) {
-    if (isShowingSequence) {
-        return;
-    }
-
-    lightPad(index);
-
-    if (index === sequence[playerStep]) {
-        playerStep = playerStep + 1;
-
-        if (playerStep === sequence.length) {
-            setTimeout(nextRound, 700);
-        }
-    } else {
-        endGame();
-    }
-}
-
-pads.forEach(function (pad) {
-    pad.addEventListener("click", function () {
-        var index = Number(pad.dataset.index);
-        handlePadClick(index);
-    });
-});
-
-startBtn.addEventListener("click", function () {
-    startBtn.disabled = true;
-    startGame();
-});
+    };
+    controller.init();
+})();
