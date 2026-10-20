@@ -1,0 +1,25 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  color: #1a2f4b;
+  text-align: center;
+  margin: 30px 20px;
+}
+
+canvas {
+  border: 3px solid #1a2f4b;
+  max-width: 100%;
+}
+
+#gameOver h2 {
+  color: #e63946;
+}
+
+#restartBtn {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
