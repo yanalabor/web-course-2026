@@ -1,88 +1,51 @@
-import { GRID_SIZE, CELL_SIZE } from "./config.js";
+const CELL_SIZE = 20; // Каждая клетка по 20px
 
-export function createView() {
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-    const scoreText = document.getElementById("score");
-    const gameOverBox = document.getElementById("gameOver");
-    const finalScore = document.getElementById("finalScore");
-    const restartBtn = document.getElementById("restartBtn");
+export class GameView {
+    constructor() {
+        this.canvas = document.getElementById("gameCanvas");
+        this.ctx = this.canvas.getContext("2d");
+        this.scoreEl = document.getElementById("score");
+        this.overEl = document.getElementById("gameOver");
+        this.finalScoreEl = document.getElementById("finalScore");
+        this.restartBtn = document.getElementById("restartBtn");
+    }
 
-    canvas.width = GRID_SIZE * CELL_SIZE;
-    canvas.height = GRID_SIZE * CELL_SIZE;
+    render(state) {
+        this.canvas.width = state.gridSize * CELL_SIZE;
+        this.canvas.height = state.gridSize * CELL_SIZE;
 
-    function drawField() {
-        ctx.fillStyle = "#f0f8ff";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        this.ctx.fillStyle = "#f0f8ff";
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        ctx.strokeStyle = "#dbe9f6";
-        for (let i = 1; i < GRID_SIZE; i++) {
-            ctx.beginPath();
-            ctx.moveTo(i * CELL_SIZE, 0);
-            ctx.lineTo(i * CELL_SIZE, canvas.height);
-            ctx.stroke();
+        this.ctx.fillStyle = "#e63946";
+        this.ctx.fillRect(state.apple.x * CELL_SIZE + 2, state.apple.y * CELL_SIZE + 2, CELL_SIZE - 4, CELL_SIZE - 4);
 
-            ctx.beginPath();
-            ctx.moveTo(0, i * CELL_SIZE);
-            ctx.lineTo(canvas.width, i * CELL_SIZE);
-            ctx.stroke();
+        this.ctx.fillStyle = "#2a9d4f";
+        state.snake.forEach(s => {
+            this.ctx.fillRect(s.x * CELL_SIZE + 1, s.y * CELL_SIZE + 1, CELL_SIZE - 2, CELL_SIZE - 2);
+        });
+
+        this.scoreEl.textContent = "Счёт: " + state.score;
+
+        if (state.gameOver) {
+            this.finalScoreEl.textContent = "Ваш счёт: " + state.score;
+            this.overEl.removeAttribute("hidden");
+        } else {
+            this.overEl.setAttribute("hidden", "true");
         }
     }
 
-    function drawApple(apple) {
-        if (!apple) {
-            return;
-        }
-        ctx.fillStyle = "#e63946";
-        ctx.beginPath();
-        ctx.arc(
-            apple.x * CELL_SIZE + CELL_SIZE / 2,
-            apple.y * CELL_SIZE + CELL_SIZE / 2,
-            CELL_SIZE / 2 - 2,
-            0,
-            Math.PI * 2
-        );
-        ctx.fill();
-    }
-
-    function drawSnake(snake) {
-        for (let i = 0; i < snake.length; i++) {
-            ctx.fillStyle = i === 0 ? "#1d6b3a" : "#2a9d4f";
-            ctx.fillRect(
-                snake[i].x * CELL_SIZE + 1,
-                snake[i].y * CELL_SIZE + 1,
-                CELL_SIZE - 2,
-                CELL_SIZE - 2
-            );
-        }
-    }
-
-    function render(state) {
-        drawField();
-        drawApple(state.apple);
-        drawSnake(state.snake);
-
-        scoreText.textContent = "Счёт: " + state.score;
-        finalScore.textContent = "Ваш счёт: " + state.score;
-        gameOverBox.hidden = !state.gameOver;
-    }
-
-    function bindKeys(handler) {
-        document.addEventListener("keydown", function (event) {
-            if (event.key.indexOf("Arrow") === 0) {
-                event.preventDefault();
-                handler(event.key);
+    bindKeyPress(handler) {
+        window.addEventListener("keydown", e => {
+            const keys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+            if (keys.includes(e.key)) {
+                e.preventDefault();
+                handler(e.key);
             }
         });
     }
 
-    function bindRestart(handler) {
-        restartBtn.addEventListener("click", handler);
+    bindRestart(handler) {
+        this.restartBtn.addEventListener("click", handler);
     }
-
-    return {
-        render: render,
-        bindKeys: bindKeys,
-        bindRestart: bindRestart
-    };
 }
