@@ -1,62 +1,58 @@
-import { MOVE_INTERVAL } from "./config.js";
+import { GameModel } from "./model.js";
+import { GameView } from "./view.js";
 
-export function createController(model, view) {
-  let lastMoveTime = 0;
-  let frameId = null;
+const INTERVAL = 150;
+export class GameController {
+  constructor(model, view) {
+    this.model = model;
+    this.view = view;
+    this.lastTime = 0;
+    this.frameId = null;
 
-  function update(currentTime) {
-    if (model.getState().gameOver) {
+    this.view.bindKeyPress(this.handleKey.bind(this));
+    this.view.bindRestart(this.start.bind(this));
+  }
+
+  start() {
+    if (this.frameId) cancelAnimationFrame(this.frameId);
+    this.model.reset();
+    this.lastTime = performance.now();
+    this.frameId = requestAnimationFrame(this.loop.bind(this));
+  }
+
+  handleKey(key) {
+    const keysMap = {
+      ArrowUp: [0, -1],
+      ArrowDown: [0, 1],
+      ArrowLeft: [-1, 0],
+      ArrowRight: [1, 0]
+    };
+    const [x, y] = keysMap[key];
+    this.model.setDirection(x, y);
+  }
+
+  loop(currentTime) {
+    const state = this.model.getState();
+
+    if (state.gameOver) {
+      this.view.render(state);
+      this.frameId = null;
       return;
     }
 
-    const passed = currentTime - lastMoveTime;
+    this.frameId = requestAnimationFrame(this.loop.bind(this));
 
-    if (passed >= MOVE_INTERVAL) {
-      model.moveSnake();
-      lastMoveTime = currentTime - (passed % MOVE_INTERVAL);
-    }
+    if (currentTime - this.lastTime < INTERVAL) return;
+    this.lastTime = currentTime - ((currentTime - this.lastTime) % INTERVAL);
+
+    this.model.moveSnake();
+    this.view.render(this.model.getState());
   }
-
-  function draw() {
-    view.render(model.getState());
-  }
-
-  function loop(currentTime) {
-    update(currentTime);
-    draw();
-
-    if (model.getState().gameOver) {
-      frameId = null;
-    } else {
-      frameId = requestAnimationFrame(loop);
-    }
-  }
-
-  function handleKey(key) {
-    if (key === "ArrowUp") {
-      model.setDirection(0, -1);
-    } else if (key === "ArrowDown") {
-      model.setDirection(0, 1);
-    } else if (key === "ArrowLeft") {
-      model.setDirection(-1, 0);
-    } else if (key === "ArrowRight") {
-      model.setDirection(1, 0);
-    }
-  }
-
-  function start() {
-    if (frameId !== null) {
-      cancelAnimationFrame(frameId);
-    }
-    model.reset();
-    lastMoveTime = performance.now();
-    frameId = requestAnimationFrame(loop);
-  }
-
-  view.bindKeys(handleKey);
-  view.bindRestart(start);
-
-  return {
-    start: start
-  };
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const model = new GameModel();
+  const view = new GameView();
+  const controller = new GameController(model, view);
+  controller.start();
+});
