@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лента постов с бесконечным скроллом</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Лента постов</h1>
+        <input type="text" id="searchInput" placeholder="Поиск по заголовку...">
+        <div id="postsContainer"></div>
+        <div id="loading" class="loading" style="display: none;">Загрузка...</div>
+        <div id="error" class="error" style="display: none;"></div>
+        <div id="endMessage" class="end-message" style="display: none;">Больше постов нет</div>
+    </div>
+    <script src="controller.js" type="module"></script>
+</body>
+</html>
