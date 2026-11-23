@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f1fa;
+  color: #333;
+  min-height: 100vh;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
